@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${default}",
+                "/usr/include/x86_64-linux-gnu"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerArgs": [
+                "-I/usr/include/",
+                "-I/usr/include/SDL2/",
+                "-D_REENTTRANT",
+                "-I/usr/lib/gcc/x86_64-linux-gnu/13/include/"
+            ]
+        }
+    ],
+    "version": 4
+}
