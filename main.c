@@ -41,7 +41,8 @@ void *scp(void* p) {
 #define MAX_LINES 16
 char buffer[MAX_LINES][MAX_COLS]; // 16 lines, 1024 characters long
 size_t bufferSize[MAX_LINES] = {0};
-size_t lineNum = 0;
+size_t lineNum = 0; // Current line that you are on
+size_t currentMaxLines =  0; // Amount of lines in the buffer
 
 int textScaleFactor = 2;
 
@@ -95,7 +96,7 @@ void renderChar(SDL_Renderer* renderer, SDL_Texture* tex, char c, int x, int y) 
 }
 
 void renderBuffer(SDL_Renderer* renderer, SDL_Texture* tex) {
-    for(size_t j = 0; j <= lineNum; j++) {
+    for(size_t j = 0; j <= currentMaxLines; j++) {
         for (size_t i = 0; i < bufferSize[j]; i++) {
             renderChar(renderer, tex, buffer[j][i], i, j);
         }
@@ -110,7 +111,7 @@ int main(void) {
 			    SCREEN_WIDTH, SCREEN_HEIGHT,
 			    SDL_WINDOW_SHOWN
 			    ));
-    
+
     SDL_Renderer* renderer = scp(SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED));
 
     SDL_Surface* fontSurface = scp(IMG_Load("charmap-oldschool_white.png"));
@@ -167,6 +168,7 @@ int main(void) {
                         if (cursorPos.x > bufferSize[cursorPos.y]) {
                             cursorPos.x = bufferSize[cursorPos.y];
                         }
+                        currentMaxLines += 1;
                     }
                     break;
                 }
@@ -198,15 +200,17 @@ int main(void) {
                         if (cursorPos.x > bufferSize[cursorPos.y]) {
                             cursorPos.x = bufferSize[cursorPos.y];
                         }
+                        lineNum = cursorPos.y;
                     }
                     break;
                 }
                 case SDLK_DOWN: {
-                    if (cursorPos.y < lineNum) {
+                    if (cursorPos.y < currentMaxLines) {
                         cursorPos.y += 1;
                         if (cursorPos.x > bufferSize[lineNum]) {
                             cursorPos.x = bufferSize[lineNum];
                         }
+                        lineNum = cursorPos.y;
                     }
                     break;
                 }
@@ -234,12 +238,12 @@ int main(void) {
                     ctrlPressed = false;
                     break;
                 }
-                
+
                 default:
                     break;
                 }
                 break;
-            } 
+            }
             default:
                 break;
             }
